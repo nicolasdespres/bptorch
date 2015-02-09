@@ -1,8 +1,8 @@
-package = "examplepackage"
+package = "bptorch"
 version = "scm-1"
 
 source = {
-   url = "git://github.com/soumith/examplepackage.torch",
+   url = "git://github.com/bpiwowar/bptorch",
    tag = "master"
 }
 
@@ -11,7 +11,7 @@ description = {
    detailed = [[
    	    A hello-world for torch packages
    ]],
-   homepage = "https://github.com/soumith/examplepackage.torch"
+   homepage = "https://github.com/bpiwowar/bptorch"
 }
 
 dependencies = {

@@ -1,7 +1,5 @@
 require 'torch'
 
-local examplepackage = {}
+local bptorch = {}
 
-examplepackage.hellomodule = require 'examplepackage.hellomodule'
-
-return examplepackage
+return bptorch
