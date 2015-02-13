@@ -4,6 +4,9 @@ CMAKE_POLICY(VERSION 2.8)
 SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}")
 
 FIND_PACKAGE(Torch REQUIRED)
+FIND_PACKAGE(CUDA 4.0 REQUIRED)
+FIND_PACKAGE(BLAS REQUIRED)
+MESSAGE(STATUS "${BLAS_LIBRARIES}")
 
 IF(APPLE)
   # work around for mac os x bug:
@@ -14,21 +17,22 @@ IF(APPLE)
   endif()
 ENDIF()
 
-FIND_PACKAGE(CUDA 4.0 REQUIRED)
+SET_SOURCE_FILES_PROPERTIES(src/cuda/HSMHost.cpp src/cpu/HSM.cpp PROPERTIES COMPILE_FLAGS -std=c++11 )
+
 
 LIST(APPEND CUDA_NVCC_FLAGS "-arch=sm_20")
 
 INCLUDE_DIRECTORIES("${Torch_INSTALL_INCLUDE}/THC")
 LINK_DIRECTORIES("${Torch_INSTALL_LIB}")
 
-SET(src-cuda init.cu)
-SET(luasrc init.lua test.lua)
+SET(src-cuda src/cuda/init.cu src/cuda/HSM.cu src/cuda/HSMHost.cpp src/cpu/HSM.cpp)
+SET(luasrc src/lua/init.lua src/lua/HSM.lua test.lua)
 
 CUDA_ADD_LIBRARY(bptorch MODULE ${src-cuda})
 TARGET_LINK_LIBRARIES(bptorch luaT THC TH)
 IF(APPLE)
-  SET_TARGET_PROPERTIES(bptorch PROPERTIES
-    LINK_FLAGS "-undefined dynamic_lookup")
+  SET_TARGET_PROPERTIES(bptorch PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+  add_definitions(-framework Accelerate)
 ENDIF()
 
 ### Torch packages supposes libraries prefix is "lib"
