@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/facebook/thpp.git
+	branch = master
+	commit = 10031c9dc56a8a389bb383d0140d77132642a49c
+	parent = c578bc96b60b790723b5353ad448d10d00146296
+	cmdver = 0.2.0
