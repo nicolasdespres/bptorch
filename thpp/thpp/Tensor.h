@@ -17,7 +17,9 @@
 
 #include <thpp/Storage.h>
 #include <thpp/detail/Tensor.h>
+#ifdef THRIFT_FOUND
 #include <thpp/if/gen-cpp2/Tensor_types.h>
+#endif
 #include <folly/Range.h>
 #include <folly/io/IOBuf.h>
 
@@ -90,7 +92,9 @@ class Tensor {
       std::initializer_list<long> strides = std::initializer_list<long>());
 
   // Deserialize from Thrift. Throws if wrong type.
+#ifdef THRIFT_FOUND
   explicit Tensor(ThriftTensor&& thriftTensor);
+#endif
 
   // Destructor
   ~Tensor();
@@ -132,6 +136,7 @@ class Tensor {
   // Serialize to Thrift. Non-const because the resulting ThriftTensor
   // may share memory with *this, and so changes in the ThriftTensor may
   // affect changes in *this.
+#ifdef THRIFT_FOUND
   void serialize(ThriftTensor& out,
                  ThriftTensorEndianness endianness =
                     ThriftTensorEndianness::NATIVE,
@@ -143,6 +148,7 @@ class Tensor {
                             ThriftTensorEndianness::NATIVE) const {
     const_cast<Tensor*>(this)->serialize(out, endianness, false);
   }
+#endif
 
   // Get a pointer to the underlying TH object; *this releases ownership
   // of that object.
@@ -468,7 +474,9 @@ std::ostream& operator<<(std::ostream& s, const Tensor<T>& t) {
 
 }  // namespaces
 
+#ifdef THRIFT_FOUND
 #include <thpp/TensorSerialization-inl.h>
+#endif
 #include <thpp/Tensor-inl.h>
 
 #endif /* THPP_TENSOR_H_ */

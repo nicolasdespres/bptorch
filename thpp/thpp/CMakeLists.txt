@@ -6,7 +6,8 @@
 #  of patent rights can be found in the PATENTS file in the same directory.
 #
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7 FATAL_ERROR)
+# TODO: Update to to 3.2 ASAP (c++11 support)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)
 
 # Torch messes this up
 SET(SAVED_CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
@@ -24,19 +25,21 @@ MLI_SET_DEPTH(1)
 FIND_PACKAGE(Folly REQUIRED)
 FIND_PACKAGE(Glog REQUIRED)
 FIND_PACKAGE(Torch REQUIRED)
-FIND_PACKAGE(Thrift REQUIRED)
-INCLUDE_DIRECTORIES(
-  ${FOLLY_INCLUDE_DIR}
-  ${GLOG_INCLUDE_DIR}
-  ${THRIFT_INCLUDE_DIR}
-)
+FIND_PACKAGE(Thrift)
+if(THRIFT_FOUND)
+  include_directories(${THRIFT_INCLUDE_DIR})
+endif()
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/.. ${FOLLY_INCLUDE_DIR} ${GLOG_INCLUDE_DIR})
+
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
-ADD_SUBDIRECTORY("gtest-1.7.0")
-INCLUDE_DIRECTORIES(
-  "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.7.0/include"
-)
+# ADD_SUBDIRECTORY("gtest-1.7.0")
+# INCLUDE_DIRECTORIES(
+#   "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.7.0/include"
+# )
 
 SET(src
   Storage.cpp
@@ -62,18 +65,23 @@ SET(h_detail
   detail/TensorGeneric.h
 )
 
-ADD_THRIFT2(src "if/Tensor.thrift")
+if(THRIFT_FOUND)
+  ADD_THRIFT2(src "if/Tensor.thrift")
+endif()
 
 ADD_LIBRARY(thpp SHARED ${src})
 
 # This is a template library, so some dependent libraries are only used from
 # header files, so we'd like to force them to be linked.
-SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-as-needed")
+# SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-as-needed")
 
-TARGET_LINK_LIBRARIES(thpp
-  TH ${FOLLY_LIBRARIES} ${GLOG_LIBRARIES} ${THRIFT_LIBRARIES})
+TARGET_LINK_LIBRARIES(thpp TH ${FOLLY_LIBRARIES} ${GLOG_LIBRARIES})
 
-ADD_SUBDIRECTORY("test")
+if(THRIFT_FOUND)
+  target_link_libraries(thpp ${THRIFT_LIBRARIES})
+endif()
+
+# ADD_SUBDIRECTORY("test")
 
 SET(CMAKE_INSTALL_PREFIX ${SAVED_CMAKE_INSTALL_PREFIX})
 
@@ -86,4 +94,6 @@ INSTALL(FILES ${h}
   DESTINATION "include/${MLI_INCLUDE_RELATIVE_OUTPUT_DIR}")
 INSTALL(FILES ${h_detail}
   DESTINATION "include/${MLI_INCLUDE_RELATIVE_OUTPUT_DIR}/detail")
-INSTALL_THRIFT2_HEADERS("if" "include")
+if(THRIFT_FOUND)
+  INSTALL_THRIFT2_HEADERS("if" "include")
+endif()

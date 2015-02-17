@@ -61,6 +61,7 @@ Tensor<T>::Tensor(const std::vector<long>& sizes,
     : Tensor(LongStorage(sizes.begin(), sizes.end()),
              LongStorage(strides.begin(), strides.end())) { }
 
+#ifdef THRIFT_FOUND
 template <class T>
 Tensor<T>::Tensor(ThriftTensor&& thriftTensor) : t_(nullptr) {
   auto buf = detail::deserialize(std::move(thriftTensor),
@@ -73,6 +74,7 @@ Tensor<T>::Tensor(ThriftTensor&& thriftTensor) : t_(nullptr) {
   t_ = Ops::_newWithStorage(data.th(), 0, s.th(), nullptr);
   DCHECK_EQ(data.size(), size());
 }
+#endif
 
 template <class T>
 Tensor<T>::~Tensor() {
@@ -165,6 +167,7 @@ auto Tensor<T>::moveAsTH() -> THType* {
   return out;
 }
 
+#ifdef THRIFT_FOUND
 template <class T>
 void Tensor<T>::serialize(ThriftTensor& out,
                           ThriftTensorEndianness endianness,
@@ -181,6 +184,7 @@ void Tensor<T>::serialize(ThriftTensor& out,
       endianness,
       mayShare);
 }
+#endif
 
 template <class T>
 void Tensor<T>::force(unsigned newMode) {

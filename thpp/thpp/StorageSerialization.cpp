@@ -13,6 +13,7 @@
 namespace thpp {
 namespace detail {
 
+#ifdef THRIFT_FOUND
 void serialize(
     ThriftStorage& out,
     folly::IOBuf&& data,
@@ -37,5 +38,7 @@ void serialize(
 
 template folly::IOBuf deserialize(ThriftStorage& in,
                                   ThriftTensorDataType dtype);
+
+#endif
 
 }}  // namespaces

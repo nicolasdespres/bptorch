@@ -272,10 +272,12 @@ Storage<T>::Storage(folly::IOBuf&& iob) : t_(nullptr) {
   setFromIOBuf(std::move(iob));
 }
 
+#ifdef THRIFT_FOUND
 template <class T>
 Storage<T>::Storage(ThriftStorage&& in) : t_(nullptr) {
   setFromIOBuf(detail::deserialize(std::move(in), detail::dataType<T>()));
 }
+#endif
 
 template <class T>
 void Storage<T>::setFromIOBuf(folly::IOBuf&& iob) {
@@ -293,6 +295,7 @@ void Storage<T>::setFromIOBuf(folly::IOBuf&& iob) {
       new detail::IOBufAllocator(std::move(iob)));
 }
 
+#ifdef THRIFT_FOUND
 template <class T>
 void Storage<T>::serialize(ThriftStorage& out,
                            ThriftTensorEndianness endianness,
@@ -300,6 +303,7 @@ void Storage<T>::serialize(ThriftStorage& out,
   detail::serialize(out, const_cast<Storage*>(this)->getIOBuf(),
                     detail::dataType<T>(), endianness, mayShare);
 }
+#endif
 
 template <class T>
 auto Storage<T>::moveAsTH() -> THType* {

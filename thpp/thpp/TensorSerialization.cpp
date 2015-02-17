@@ -28,6 +28,7 @@ std::unique_ptr<folly::IOBuf> partialCloneOne(const folly::IOBuf& buf,
 
 }  // namespace
 
+#ifdef FOUND_THRIFT
 void serialize(
     ThriftTensor& out,
     LongRange sizes,
@@ -144,5 +145,5 @@ void serialize(
 
 template folly::IOBuf deserialize(ThriftTensor& in,
                                   ThriftTensorDataType dtype);
-
+#endif
 }}  // namespaces
