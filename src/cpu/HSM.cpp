@@ -7,26 +7,21 @@
 #include <limits>
 
 #include <lua.hpp>
-// #include <mkl.h>
 #include <luaT.h>
-#include <omp.h>
 
-// #ifdef __APPLE__
-// # include "Accelerate.h"
-// #else
-// # include "Blas.h"
-// #endif
+#include "thpp/Storage.h"
+#include "thpp/Tensor.h"
+#include <fblualib/LuaUtils.h>
 
-// #include "torch/fb/fbcunn/layers/LuaUtils.h"
-// #include "torch/fb/fbcunn/layers/Tensor.h"
-// #include "Vml.h"
-// #include <folly/Format.h>
+#include <folly/Format.h>
 
 namespace facebook {
 namespace deeplearning {
 namespace torch {
 
 namespace {
+using namespace fblualib;
+using namespace thpp;
 
 template <class T> using thOps = thpp::detail::TensorOps<T>;
 
