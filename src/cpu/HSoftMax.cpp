@@ -1,6 +1,4 @@
 #include <fblualib/LuaUtils.h>
-#include "thpp/Storage.h"
-#include "thpp/Tensor.h"
 
 namespace bptorch {
     

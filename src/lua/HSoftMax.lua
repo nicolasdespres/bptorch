@@ -15,11 +15,12 @@ local HSoftMax, parent = torch.class('nn.HSoftMax', 'nn.Module')
 -- hierarchy: an array containing parents (0 == root), neg = left branch, pos = right branch.
 -- leaves come first, followed by the inner nodes
 -- last node is the root
-function HSoftMax:__init(inputSize, nleaves, parents)
+function HSoftMax:__init(inputSize, parents)
    parent.__init(self)
 
    -- @TODO: verify the hierarchy is OK
    self.parents = parents:long()
+   local nleaves = (parents:size(1) + 1) / 2
    self.nleaves = nleaves
  
    local innerNodes = parents:size(1) - nleaves
@@ -37,8 +38,8 @@ function HSoftMax:__init(inputSize, nleaves, parents)
          else
             self.depth[ix] = compute_depth(pix - nleaves) + 1
          end
-         return self.depth[ix]
       end
+      return self.depth[ix]
    end
    self.depth:fill(-1)
    for ix = 1, innerNodes do

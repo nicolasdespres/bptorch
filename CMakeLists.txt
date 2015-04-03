@@ -6,7 +6,6 @@ SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}"
 
 FIND_PACKAGE(Torch REQUIRED)
 FIND_PACKAGE(CUDA 4.0 REQUIRED)
-# FIND_PACKAGE(BLAS REQUIRED)
 MESSAGE(STATUS "${BLAS_LIBRARIES}")
 
 add_subdirectory(thpp/thpp)
@@ -21,26 +20,25 @@ IF(APPLE)
   endif()
 ENDIF()
 
-SET(CXX11_FILES src/fblualib/LuaUtils.cpp src/cuda/HSMHost.cpp src/cpu/HSM.cpp src/cpu/HSoftMax.cpp src/cpu/init.cpp)
-SET_SOURCE_FILES_PROPERTIES(${CXX11_FILES} PROPERTIES COMPILE_FLAGS -std=c++11 )
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_GENERATOR STREQUAL "Ninja")
- add_definitions("-fcolor-diagnostics" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
-endif()
-LIST(APPEND CUDA_NVCC_FLAGS "-arch=sm_20")
+SET(src-cpp src/fblualib/LuaUtils.cpp src/cpu/HSM.cpp src/cpu/HSoftMax.cpp src/cpu/init.cpp src/cuda/HSMHost.cpp src/cuda/HSoftMaxHost.cpp)
 
-INCLUDE_DIRECTORIES("${Torch_INSTALL_INCLUDE}/THC" "${CMAKE_CURRENT_SOURCE_DIR}/thpp" "${CMAKE_CURRENT_SOURCE_DIR}/src")
+
+SET(src-cuda src/cuda/init.cu src/cuda/HSM.cu src/cuda/HSoftMax.cu ${src-cpp})
+SET(luasrc src/lua/init.lua src/lua/HSM.lua src/lua/HSoftMax.lua src/lua/MOperator.lua)
+source_group(lua FILES ${luasrc})
+
+SET_SOURCE_FILES_PROPERTIES(${src-cpp} PROPERTIES COMPILE_FLAGS -std=c++11 )
+
+
+INCLUDE_DIRECTORIES("${Torch_INSTALL_INCLUDE}/THC" "${CMAKE_CURRENT_SOURCE_DIR}/thpp" "${CMAKE_CURRENT_SOURCE_DIR}/src" "${FOLLY_INCLUDE_DIR}")
 LINK_DIRECTORIES("${Torch_INSTALL_LIB}")
 
-SET(src-cuda src/cuda/init.cu src/cuda/HSM.cu ${CXX11_FILES})
-SET(luasrc src/lua/init.lua src/lua/HSM.lua src/lua/HSoftMax.lua)
-source_group(lua FILES ${luasrc})
+LIST(APPEND CUDA_NVCC_FLAGS "-arch=sm_20")
+
+
 CUDA_ADD_LIBRARY(bptorch MODULE ${src-cuda} ${luasrc})
 TARGET_LINK_LIBRARIES(bptorch luaT THC TH luajit)
-# IF(APPLE)
-#   SET_TARGET_PROPERTIES(bptorch PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
-#   add_definitions(-framework Accelerate)
-# ENDIF()
 
 
 ### Torch packages supposes libraries prefix is "lib"
