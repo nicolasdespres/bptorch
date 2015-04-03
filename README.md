@@ -1,11 +1,25 @@
-examplepackage.torch
-====================
+# bptorch
 
-A hello-world for torch packages
+Library containing CPU/Cuda modules for torch:
+
+- Binary Hierarchical SoftMax
+
+## TODO
+
+- Get rid of the folly library dependency
+
+## Requirements
+
+- The facebook [folly](https://github.com/facebook/folly) library
+
+## Installation
 
 You can install the package by opening a terminal, changing directory into the folder and typing:
 
-luarocks make
+- Standard location for the folly library
 
-With external folly library
-VERBOSE=1 CMAKE_INCLUDE_PATH=$HOME/torch7/bptorch/folly/usr/include CMAKE_LIBRARY_PATH=$HOME/torch7/bptorch/folly/usr/lib luarocks make
+     luarocks make
+
+- Specifying the folly library path:
+
+     CMAKE_INCLUDE_PATH=$FOLLYDIR/include CMAKE_LIBRARY_PATH=$FOLLYDIR/lib luarocks make
