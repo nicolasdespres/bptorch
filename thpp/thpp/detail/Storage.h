@@ -12,7 +12,7 @@
 #define THPP_DETAIL_STORAGE_H_
 
 #include <THStorage.h>
-#include <folly/Range.h>
+#include <thpp/folly/Range.h>
 
 namespace thpp {
 

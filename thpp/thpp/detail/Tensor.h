@@ -13,8 +13,8 @@
 
 #include <TH.h>
 #include <thpp/detail/Storage.h>
-#include <folly/Preprocessor.h>
-#include <folly/Range.h>
+// #include <folly/Preprocessor.h>
+// #include <folly/Range.h>
 
 namespace thpp {
 

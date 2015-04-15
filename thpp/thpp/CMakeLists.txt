@@ -43,9 +43,9 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
 SET(src
   Storage.cpp
-  StorageSerialization.cpp
+  # StorageSerialization.cpp
   detail/StorageDefs.cpp
-  TensorSerialization.cpp
+  # TensorSerialization.cpp
   detail/TensorDefs.cpp
 )
 
@@ -55,7 +55,7 @@ SET(h
   StorageSerialization-inl.h
   Tensor.h
   Tensor-inl.h
-  TensorSerialization-inl.h
+  # TensorSerialization-inl.h
 )
 
 SET(h_detail

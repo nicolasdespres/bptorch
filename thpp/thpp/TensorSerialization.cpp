@@ -9,7 +9,7 @@
  */
 
 #include <thpp/Tensor.h>
-#include <folly/Format.h>
+// #include <folly/Format.h>
 
 namespace thpp {
 namespace detail {

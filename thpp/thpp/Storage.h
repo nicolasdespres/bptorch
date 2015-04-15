@@ -15,9 +15,9 @@
 #ifdef THRIFT_FOUND
 #include <thpp/if/gen-cpp2/Tensor_types.h>
 #endif
-#include <folly/Malloc.h>
-#include <folly/Range.h>
-#include <folly/io/IOBuf.h>
+// #include <folly/Malloc.h>
+// #include <folly/Range.h>
+// #include <folly/io/IOBuf.h>
 
 namespace thpp {
 
@@ -62,8 +62,8 @@ class Storage {
   explicit Storage(THType* t);
 
   // Create a Storage object containing the data from an IOBuf.
-  explicit Storage(folly::IOBuf&& iob);
-  explicit Storage(folly::IOBuf& iob) : Storage(*iob.clone()) { }
+  // explicit Storage(folly::IOBuf&& iob);
+  // explicit Storage(folly::IOBuf& iob) : Storage(*iob.clone()) { }
 
   // Deserialize from Thrift. Throws if wrong type.
 #ifdef THRIFT_FOUND
@@ -120,7 +120,7 @@ class Storage {
 
   // Create a IOBuf that wraps this storage object. The storage object
   // won't get deleted until all references to the IOBuf are gone.
-  folly::IOBuf getIOBuf();
+  // folly::IOBuf getIOBuf();
 
   // Serialize to Thrift.
 #ifdef THRIFT_FOUND
@@ -138,7 +138,7 @@ class Storage {
  private:
   template <class U> friend class Tensor;
 
-  void setFromIOBuf(folly::IOBuf&& iob);
+  // void setFromIOBuf(folly::IOBuf&& iob);
   void up();
   void down();
   void check(size_t index) const;

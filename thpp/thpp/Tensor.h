@@ -20,8 +20,8 @@
 #ifdef THRIFT_FOUND
 #include <thpp/if/gen-cpp2/Tensor_types.h>
 #endif
-#include <folly/Range.h>
-#include <folly/io/IOBuf.h>
+// #include <folly/Range.h>
+// #include <folly/io/IOBuf.h>
 
 namespace thpp {
 

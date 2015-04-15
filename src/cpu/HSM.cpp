@@ -13,8 +13,6 @@
 #include "thpp/Tensor.h"
 #include <fblualib/LuaUtils.h>
 
-#include <folly/Format.h>
-
 namespace facebook {
 namespace deeplearning {
 namespace torch {

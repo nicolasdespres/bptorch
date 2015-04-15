@@ -14,9 +14,9 @@
 
 #include <cmath>
 #include <type_traits>
-#include <folly/Conv.h>
-#include <folly/Likely.h>
-#include <folly/ScopeGuard.h>
+// #include <folly/Conv.h>
+// #include <folly/Likely.h>
+// #include <folly/ScopeGuard.h>
 
 namespace thpp {
 
@@ -678,21 +678,22 @@ Tensor<T>& operator/=(Tensor<T>& a, T b) {
 template <class T>
 std::string Tensor<T>::str() const {
   std::string out;
-  auto sz = sizes();
-  out.reserve(20 + 4 * sz.size());
-  folly::toAppend(kLuaTypeName, "(", &out);
+  // auto sz = sizes();
+  // out.reserve(20 + 4 * sz.size());
+  // folly::toAppend(kLuaTypeName, "(", &out);
 
-  bool first = true;
-  for (long s : sz) {
-    if (!first) {
-      out += "x";
-    }
-    first = false;
-    folly::toAppend(s, &out);
-  }
+  // bool first = true;
+  // for (long s : sz) {
+  //   if (!first) {
+  //     out += "x";
+  //   }
+  //   first = false;
+  //   folly::toAppend(s, &out);
+  // }
 
-  out += ")";
-  return out;
+  // out += ")";
+  // return out;
+  return "not implemented";
 }
 
 }  // namespaces
